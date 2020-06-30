@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import Episode from './Components/Episode';
+import Episode from './Episode';
 
-class SelectedShowContainer extends Component {
+export default class SelectedShowContainer extends Component {
 
   state = {
     selectedSeason: 1,
   }
 
-  mapSeasons = () => {
-    if (!!this.props.episodes){
-      let seasons = this.props.episodes.map((e)=> e.season).unique()
+  mapSeasons = () => {    
+    if (!!this.props.allEpisodes){
+      let seasons = this.props.allEpisodes.map((e)=> e.season).unique()
 
       return seasons.map((s) => {
         return (<option value={s} key={s}>Season {s}</option>)
@@ -17,16 +17,16 @@ class SelectedShowContainer extends Component {
     }
   }
 
-  mapEpisodes = () => {
-    return this.props.episodes.map((e)=>{
-      if (e.season == this.state.selectedSeason){
+  mapEpisodes = () => {    
+    return this.props.allEpisodes.map((e)=> {
+      if (e.season === this.state.selectedSeason){
         return (<Episode eachEpisode={e} key={e.id}/>)
       }
     })
   }
 
   handleSelectionChange = (e) => {
-    this.setState({ selectedSeason: e.target.value })
+    this.setState({ selectedSeason: parseInt(e.target.value) })
   }
 
 
@@ -41,7 +41,7 @@ class SelectedShowContainer extends Component {
         <p>Premiered: {selectedShow.premiered}</p>
         <p>Status: {selectedShow.status}</p>
         <p>Average Rating: {selectedShow.rating.average}</p>
-        <select style={{display: 'block'}} onChange={this.handleSelectionChange}>
+        <select style={{ display: 'block' }} value={this.state.selectedSeason} onChange={this.handleSelectionChange}>
           {this.mapSeasons()}
         </select>
         {this.mapEpisodes()}
@@ -50,9 +50,6 @@ class SelectedShowContainer extends Component {
   }
 
 }
-
-export SelectedShowContainer;
-
 
 Array.prototype.unique = function() {
   var arr = [];
@@ -63,3 +60,5 @@ Array.prototype.unique = function() {
   }
   return arr;
 }
+
+
