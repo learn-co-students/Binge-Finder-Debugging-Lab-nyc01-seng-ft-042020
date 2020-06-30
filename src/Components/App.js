@@ -17,40 +17,43 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    Adapter.getShows().then(shows => this.setState({shows}))
+    Adapter.getShows().then(shows => this.setState({ shows: shows }))
   }
 
   componentDidUpdate = () => {
     window.scrollTo(0, 0)
   }
 
-  handleSearch (e){
+  handleSearch = (e) => {
     this.setState({ searchTerm: e.target.value.toLowerCase() })
   }
 
   handleFilter = (e) => {
-    e.target.value === "No Filter" ? this.setState({ filterRating:"" }) : this.setState({ filterRating: e.target.value})
+    e.target.value === "No Filter"
+      ? this.setState({ filterRating: "", filterByRating: false })
+      : this.setState({ filterRating: parseInt(e.target.value), filterByRating: true })
   }
 
   selectShow = (show) => {
     Adapter.getShowEpisodes(show.id)
     .then((episodes) => this.setState({
       selectedShow: show,
-      episodes
+      episodes: episodes
     }))
   }
 
   displayShows = () => {
-    if (this.state.filterByRating){
-      return this.state.shows.filter((s)=> {
-        return s.rating.average >= this.state.filterByRating
+    if (this.state.filterByRating) {
+      const filteredArray = this.state.shows.filter((s) => {
+        return s.rating.average >= this.state.filterRating
       })
+      return filteredArray.filter(show => {return show.name.toLowerCase().includes(this.state.searchTerm)})
     } else {
-      return this.state.shows
+      return this.state.shows.filter(show => {return show.name.toLowerCase().includes(this.state.searchTerm)})
     }
   }
 
-  render (){
+  render() {
     return (
       <div>
         <Nav handleFilter={this.handleFilter} handleSearch={this.handleSearch} searchTerm={this.state.searchTerm}/>
