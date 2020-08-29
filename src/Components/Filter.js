@@ -17,5 +17,7 @@ const Filter = (props) => {
       <option value="9">9</option>
     </select>
     </div>
-  )
-}
+  );
+};
+
+export default Filter;

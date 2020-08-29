@@ -53,7 +53,6 @@ class SelectedShowContainer extends Component {
 
 export SelectedShowContainer;
 
-
 Array.prototype.unique = function() {
   var arr = [];
   for(var i = 0; i < this.length; i++) {
